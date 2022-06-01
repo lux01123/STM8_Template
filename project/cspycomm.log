@@ -1,0 +1,11 @@
+Mon Mar 28 10:15:12 2022: Log started
+Mon Mar 28 10:15:25 2022: DiGdiOpen(VersionH = 294, VersionL = 294, Parameters = -stlink3 -mcuname STM8L052C6)
+Mon Mar 28 10:15:25 2022: DiGdiInitIO(DeviceFile = usb://usb)
+Mon Mar 28 10:15:25 2022: DiGdiVersion()
+Mon Mar 28 10:15:25 2022: DiGdiGetFeatures()
+Mon Mar 28 10:15:25 2022: DiGdiInitRegisterMap()
+Mon Mar 28 10:15:25 2022: DiGdiSetConfig(Mcu = STM8L052C6)
+Mon Mar 28 10:15:25 2022: Failed to set configuration with MCU name STM8L052C6: gdi-error [40606]: Configuration error: detected MCU different from the selected one
+Mon Mar 28 10:16:10 2022: DiGdiOpen(VersionH = 294, VersionL = 294, Parameters = -stlink3 -mcuname STM8L052C6)
+Mon Mar 28 10:16:10 2022: DiGdiInitIO(DeviceFile = usb://usb)
+Mon Mar 28 10:16:10 2022: Failed to initialize communcation with hardware: SWIM error [3]: Detected hardware not compatible with software

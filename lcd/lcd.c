@@ -1,0 +1,186 @@
+#include "lcd.h"
+
+void gpiolcd()
+{
+  GPIO_Init(RS_PORT, RS_PIN, GPIO_Mode_Out_PP_High_Fast);
+  GPIO_Init(EN_PORT, EN_PIN, GPIO_Mode_Out_PP_High_Fast);
+  GPIO_Init(D4_PORT, D4_PIN, GPIO_Mode_Out_PP_High_Fast);
+  GPIO_Init(D5_PORT, D5_PIN, GPIO_Mode_Out_PP_High_Fast);
+  GPIO_Init(D6_PORT, D6_PIN, GPIO_Mode_Out_PP_High_Fast);
+  GPIO_Init(D7_PORT, D7_PIN, GPIO_Mode_Out_PP_High_Fast);
+}
+
+void Delay(uint32_t nCount)
+{
+  /* Decrement nCount value */
+  while (nCount != 0)
+  {
+    nCount--;
+  }
+}
+
+void lcd_init(void)
+{
+	Delay(16000);
+	
+	PIN_LOW(D4_PORT, D4_PIN);
+	PIN_HIGH(D5_PORT, D5_PIN);
+	PIN_LOW(D6_PORT, D6_PIN);
+	PIN_LOW(D7_PORT, D7_PIN);
+	PIN_LOW(RS_PORT, RS_PIN);
+	
+	PIN_HIGH(EN_PORT, EN_PIN);
+	PIN_LOW(EN_PORT, EN_PIN);
+	
+	lcd_write(0, 0x28);
+	lcd_write(0, 0x0c);
+	lcd_write(0, 0x06);
+	lcd_write(0, 0x01);
+}
+
+
+//*-----------------Write to LCD-------------------*//
+void lcd_write(uint8_t type, uint8_t data)
+{
+	Delay(16000);
+	if(type)
+	{
+		PIN_HIGH(RS_PORT, RS_PIN);
+	}
+	else
+	{
+		PIN_LOW(RS_PORT, RS_PIN);
+	}
+	
+	//Send High Nibbe
+	if(data&0x80)
+	{
+		PIN_HIGH(D7_PORT, D7_PIN);
+	}
+	else
+	{
+		PIN_LOW(D7_PORT, D7_PIN);
+	}
+	
+	if(data&0x40)
+	{
+		PIN_HIGH(D6_PORT, D6_PIN);
+	}
+	else
+	{
+		PIN_LOW(D6_PORT, D6_PIN);
+	}
+	
+	if(data&0x20)
+	{
+		PIN_HIGH(D5_PORT, D5_PIN);
+	}
+	else
+	{
+		PIN_LOW(D5_PORT, D5_PIN);
+	}
+	
+	if(data&0x10)
+	{
+		PIN_HIGH(D4_PORT, D4_PIN);
+	}	
+	else
+	{
+		PIN_LOW(D4_PORT, D4_PIN);
+	}
+	
+	PIN_HIGH(EN_PORT, EN_PIN);
+	PIN_LOW(EN_PORT, EN_PIN);
+	
+	//Send Low Nibble
+	if(data&0x08)
+	{
+		PIN_HIGH(D7_PORT, D7_PIN);
+	}
+	else
+	{
+		PIN_LOW(D7_PORT, D7_PIN);
+	}
+	
+	if(data&0x04)
+	{
+		PIN_HIGH(D6_PORT, D6_PIN);
+	}
+	else
+	{
+		PIN_LOW(D6_PORT, D6_PIN);
+	}
+	
+	if(data&0x02)
+	{
+		PIN_HIGH(D5_PORT, D5_PIN);
+	}
+	else
+	{
+		PIN_LOW(D5_PORT, D5_PIN);
+	}
+	
+	if(data&0x01)
+	{
+		PIN_HIGH(D4_PORT, D4_PIN);
+	}	
+	else
+	{
+		PIN_LOW(D4_PORT, D4_PIN);
+	}
+	PIN_HIGH(EN_PORT, EN_PIN);
+	PIN_LOW(EN_PORT, EN_PIN);
+}
+
+void lcd_puts(uint8_t x, uint8_t y, int8_t *string)
+{
+	
+//	#ifdef LCD16xN	
+//	switch(x)
+//	{
+//		case 0: 
+//			lcd_write(0,0x80+0x00+y);
+//			break;
+//		case 1: 
+//			lcd_write(0,0x80+0x40+y);
+//			break;
+//		case 2: 
+//			lcd_write(0,0x80+0x10+y);
+//			break;
+//		case 3: 
+//			lcd_write(0,0x80+0x50+y);
+//			break;
+//	}
+//	#endif
+	
+	#ifdef LCD20xN
+	switch(x)
+	{
+		case 0:
+			lcd_write(0, 0x80+0x00+y);
+			break;
+		case 1:
+			lcd_write(0, 0x80+0x40+y);
+			break;
+		case 2:
+			lcd_write(0, 0x80+0x14+y);
+			break;
+		case 3:
+			lcd_write(0, 0x80+0x54+y);
+			break;
+	}	
+	#endif
+	
+	while(*string)
+	{
+		lcd_write(1, *string);
+		string++;
+	}
+}	
+
+void lcd_clear(void)
+{
+	lcd_write(0, 0x01);
+}	
+
+
